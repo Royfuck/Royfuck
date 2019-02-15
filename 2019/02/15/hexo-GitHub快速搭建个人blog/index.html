@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://i2.bvimg.com/677249/ad754117f515a8eb.jpg">
 <meta property="og:image" content="http://i2.bvimg.com/677249/8153a30e3f445c98.jpg">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5308475-bd6fb55b6847d13a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp">
-<meta property="og:updated_time" content="2019-02-15T16:08:20.276Z">
+<meta property="og:updated_time" content="2019-02-15T17:42:26.730Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo+GitHub快速搭建个人blog">
 <meta name="twitter:description" content="如何使用hexo+GitHub快速搭建个人blog？ 昨天情人节，无奈没有人陪。于是无聊地上网冲浪，打发时间，我妈看着我的浏览器说我字体太小了，看着太费眼睛。于是google找了篇教程，Ubuntu 18.04 常用软件HiDPI高分屏设置. 教程很管用，但是更吸引我的是他的blog,我在博客底部找到了网站的线索，Hexo驱动, 主题是Next, 闲着无聊，我也搞个像他这样的，说干就干，经过将近两">
@@ -284,6 +284,17 @@
 
           
           
+             <span id="/2019/02/15/hexo-GitHub快速搭建个人blog/" class="leancloud_visitors" data-flag-title="hexo+GitHub快速搭建个人blog">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
           
 
@@ -436,6 +447,9 @@
 </ul>
 <p>修改next主题配置文件中的social:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  Twitter: https://twitter.com/1007059959 || twitter</span><br><span class="line">  GitHub: https://github.com/Royfuck || github</span><br><span class="line">  Instagram: https://www.instagram.com/mazhentingmazhenting || instagram</span><br><span class="line">  Weibo: https://weibo.com/2867453232/profile?topnav=1&amp;wvr=6|| weibo</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998" target="_blank" rel="noopener">阅读统计</a></li>
+</ul>
 <blockquote class="blockquote-center">优秀的人，不是不合群，而是他们合群的人里面没有你</blockquote>
 
 
@@ -680,9 +694,9 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-snowflake-o"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Royfuck</span>
 
@@ -858,6 +872,113 @@
 
 
   
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("vuTxqzmpHsXbWFTrpsMPYrJu-gzGzoHsz", "1PYVw5v33slhj6MYcpfhCB5o");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
 
   
 
